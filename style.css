@@ -10,7 +10,7 @@
     --crema: #fbf5e8;
     --blanco: #fffdf7;
     --texto: #25392b;
-    --gris: #6d786b;
+    --gris: #353b34;
 }
 
 * {
@@ -46,8 +46,8 @@ header {
     align-items: center;
     gap: 25px;
     padding: 14px 6%;
-    background: var(--blanco);
-    border-bottom: 1px solid #e9e4d7;
+    background: #366931;
+    border-bottom: 1px solid #366931;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -81,7 +81,7 @@ nav {
     gap: 20px;
     font-size: 13px;
     font-weight: 700;
-    color: var(--verde);
+    color: rgb(112, 78, 26)smoke;
 }
 
 nav a:hover {

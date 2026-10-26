@@ -1,46 +1,46 @@
+const SUPABASE_URL = "https://obtegezmgkgmafhsqngl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WAF6gPUQ8xx3c4AJ2devFA_lyuc7Zvt";
 
-const escuelas = [
-    {
-        nombre: "Escuela Horizonte",
-        acciones: 128,
-        puntos: 1840,
-        icono: "🌞"
-    },
-    {
-        nombre: "Secundaria Los Aromos",
-        acciones: 104,
-        puntos: 1560,
-        icono: "🍂"
-    },
-    {
-        nombre: "Instituto Río Claro",
-        acciones: 91,
-        puntos: 1325,
-        icono: "🌊"
-    },
-    {
-        nombre: "Escuela del Parque",
-        acciones: 76,
-        puntos: 1090,
-        icono: "🌳"
-    }
-];
+const clienteSupabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 const rankingLista = document.getElementById("ranking-lista");
 
-escuelas.forEach((escuela, indice) => {
-    const fila = document.createElement("div");
-    fila.classList.add("fila");
+async function cargarRanking() {
+    rankingLista.innerHTML = "<p>Cargando ranking...</p>";
 
-    fila.innerHTML = `
-        <span class="puesto">${indice + 1}°</span>
-        <span class="nombre-escuela">${escuela.icono} ${escuela.nombre}</span>
-        <span>${escuela.acciones}</span>
-        <span class="puntos">${escuela.puntos.toLocaleString("es-AR")}</span>
-    `;
+    const { data, error } = await clienteSupabase
+     .from("ranking_escuelas")
+        .select("escuela, acciones, puntos_totales")
+        .order("puntos_totales", { ascending: false });
 
-    rankingLista.appendChild(fila);
-});
+    if (error) {
+        console.error("Error al cargar el ranking:", error);
+        rankingLista.textContent = "No se pudo cargar el ranking.";
+        return;
+    }
+
+    rankingLista.innerHTML = "";
+
+    data.forEach((escuela, indice) => {
+        const fila = document.createElement("div");
+        fila.classList.add("fila");
+
+        fila.innerHTML = `
+            <span class="puesto">${indice + 1}°</span>
+            <span class="nombre-escuela">🌱 ${escuela.escuela}</span>
+            <span>${escuela.acciones}</span>
+            <span class="puntos">${Number(escuela.puntos_totales).toLocaleString("es-AR")}</span>
+        `;
+
+        rankingLista.appendChild(fila);
+    });
+}
+
+cargarRanking();
+
 
 // Racha de ingreso de demostración
 let diasDeRacha = 0;
